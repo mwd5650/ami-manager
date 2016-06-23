@@ -5,7 +5,9 @@ Currently it is only functional to deregister AMIs and delete the related snapsh
 
 It requires [boto3](https://github.com/boto/boto3) (AWS Python SDK).
 
-USAGE: ami_manager.py file_with_imageids
+USAGE: ami_manager.py file_with_imageids days_to_keep
+
+days_to_keep parameter is the for telling ami_manager to delete AMIs in file_with_imageids older than the number of days given.
 
 The file_with_imageids can be formatted many ways, all that is really
 required is that a separate line needs to be formated with:
