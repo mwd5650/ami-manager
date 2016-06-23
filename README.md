@@ -1,6 +1,13 @@
 # ami-manager
 
-ami-manager aims to be a quick way to manage AWS AMIs and related snapshots. 
+###Disclaimer:
+This is very raw, and while it works is not very rubust "yet". 
+I'll be adding the command line option processingto make this much more robust. Moral of the store is....don't laugh or ridicule, I've very aware of how basic this code is.
+My point was to get it function for my own purposes...I'll add spit and polish later, or if you want I'll be very grateful
+or assistance.
+
+###ami-manager: 
+aims to be a quick way to manage AWS AMIs and related snapshots. 
 Currently it is only functional to deregister AMIs and delete the related snapshots.
 
 It requires [boto3](https://github.com/boto/boto3) (AWS Python SDK).
@@ -19,7 +26,7 @@ looks like the following:
 
     Fri Apr 29 14:31:44 UTC 2016 Backing up aws-am-app-33
     {
-      "ImageId": "ami-2b9e6d4b"
+      "ImageId": "ami-2d8c6d4b"
     }
 
   the quotes are important around the ami-id and this is the default way
