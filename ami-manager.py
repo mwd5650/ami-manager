@@ -35,10 +35,12 @@ for line in backup_log.readlines():
     tag, imageidraw = line.split(':')
     imageid = imageidraw[2:-2]
     image = ec2.Image(imageid)
+    # I don't cleanup my backup_log files (mainly so I have historical reference)
+    # Because of that I just skip the ImageId if it doesn't exist.
     try:
       image_date_parsed = dp.parse(image.creation_date)
     except:
-      continue
+      continue #skip it it doesn't exist.
     image_seconds = image_date_parsed.strftime('%s')
     if (int(today_seconds) - seconds_to_keep) > int(image_seconds):
       print image.creation_date
