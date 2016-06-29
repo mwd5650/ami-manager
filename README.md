@@ -2,9 +2,8 @@
 
 ###Disclaimer:
 This is very raw, and while it works is not very rubust "yet". 
-I'll be adding the command line option processing to make this much more robust. Moral of the store is I'm very aware of how basic this code is.
-My point was to get it function for my own purposes...I'll add spit and polish later, or if you want I'll be very grateful
-for assistance.
+I've added some basice command line argument parsing, however I still have work to do, currently this still requires that you keep your imageids stored in a file in the "ImageId": "ami-2d8c6d4b" format.
+I'll beworking on adding more commanline arguments to allow adding the ImageId directly on the command line, for one off deletes.
 
 ###ami-manager: 
 aims to be a quick way to manage AWS AMIs and related snapshots. 
@@ -12,9 +11,20 @@ Currently it is only functional to deregister AMIs and delete the related snapsh
 
 It requires [boto3](https://github.com/boto/boto3) (AWS Python SDK).
 
-USAGE: ami_manager.py file_with_imageids days_to_keep
+USAGE: ami_manager.py -f file_with_imageids -t days_to_keep
 
 days_to_keep parameter is the for telling ami_manager to delete AMIs in file_with_imageids older than the number of days given.
+  
+  usage: ami-manager.py [-h] [-f FILE] [-t TIME] [-i IMAGEID [IMAGEID ...]]
+
+  optional arguments:
+    -h, --help            show this help message and exit
+    -f FILE, --file FILE  Filename containing the ImageIds
+    -t TIME, --time TIME  Number of Days to keep, Images in Filename older than
+                        this will be deleted
+    -i IMAGEID [IMAGEID ...], --imageid IMAGEID [IMAGEID ...]
+                        Imageid, or list of ImageIds to delete *****NOT IMPLIMENTED YET
+
 
 The file_with_imageids can be formatted many ways, all that is really
 required is that a separate line needs to be formated with:
