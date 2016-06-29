@@ -15,15 +15,15 @@ USAGE: ami_manager.py -f file_with_imageids -t days_to_keep
 
 days_to_keep parameter is the for telling ami_manager to delete AMIs in file_with_imageids older than the number of days given.
   
-  usage: ami-manager.py [-h] [-f FILE] [-t TIME] [-i IMAGEID [IMAGEID ...]]
-
-  optional arguments:
-    -h, --help            show this help message and exit
-    -f FILE, --file FILE  Filename containing the ImageIds
-    -t TIME, --time TIME  Number of Days to keep, Images in Filename older than
-                        this will be deleted
-    -i IMAGEID [IMAGEID ...], --imageid IMAGEID [IMAGEID ...]
-                        Imageid, or list of ImageIds to delete *****NOT IMPLIMENTED YET
+    usage: ami-manager.py [-h] [-f FILE] [-t TIME] [-i IMAGEID [IMAGEID ...]]
+  
+    optional arguments:
+      -h, --help            show this help message and exit
+      -f FILE, --file FILE  Filename containing the ImageIds
+      -t TIME, --time TIME  Number of Days to keep, Images in Filename older than
+                          this will be deleted
+      -i IMAGEID [IMAGEID ...], --imageid IMAGEID [IMAGEID ...]
+                          Imageid, or list of ImageIds to delete *****NOT IMPLIMENTED YET
 
 
 The file_with_imageids can be formatted many ways, all that is really
