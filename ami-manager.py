@@ -1,58 +1,72 @@
+#!/usr/bin/env python
 import boto3
 import datetime
 import dateutil.parser as dp
 import sys
+import argparse
 
-#check to make sure we got the parameters we need to run.
-if len(sys.argv) < 3:
-  print "Not enough arguments given"
-  print "USAGE: ami_manager.py <file_with_imageids> <days_to_keep>"
-  exit()
+def main():
 
-#need to do some time adjustment to get this in seconds since epoc
-#isoformat is needed because AWS uses iso formated datetimes
-today = datetime.datetime.now().isoformat()
-#Parse the datetime to get it to seconds since epoch.
-seconds_to_keep = int(sys.argv[2]) * 86400
-today_parsed = dp.parse(today)
-today_seconds = today_parsed.strftime('%s')
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-f", "--file",  help="Filename containing the ImageIds", default="NONE")
+    parser.add_argument("-t", "--time",  default=1, help="Number of Days to keep, Images in Filename older than this will be deleted", type=int)
+    parser.add_argument("-i", "--imageid", nargs='+', help="Imageid, or list of ImageIds to delete")
+    args = parser.parse_args()
 
-ec2 = boto3.resource('ec2')
+    if (args.file == "NONE"):
+        print "Filename required please use --file or -f and specify a file to process."
+        exit()
 
-#images = ec2.images.limit(50)
 
-#for image in images:
-#    print image.id
+    #need to do some time adjustment to get this in seconds since epoc
+    #isoformat is needed because AWS uses iso formated datetimes
+    today = datetime.datetime.now().isoformat()
+    #Parse the datetime to get it to seconds since epoch.
+    seconds_to_keep = args.time * 86400
+    today_parsed = dp.parse(today)
+    today_seconds = today_parsed.strftime('%s')
+    print seconds_to_keep
 
-#Open up the "backup log" or file list file.
-# This needs to be error checked and trapped so when an in correct
-# file is passed we can be nice and tell you instead of dropping
-# you on your head.
-backup_log = open(str(sys.argv[1]),"rw")
+    ec2 = boto3.resource('ec2')
 
-for line in backup_log.readlines():
-  if "ImageId" in line:
-    tag, imageidraw = line.split(':')
-    imageid = imageidraw[2:-2]
-    image = ec2.Image(imageid)
-    # I don't cleanup my backup_log files (mainly so I have historical reference)
-    # Because of that I just skip the ImageId if it doesn't exist.
+    #images = ec2.images.limit(50)
+
+    #for image in images:
+    #    print image.id
+
+    #Open up the "backup log" or file list file.
     try:
-      image_date_parsed = dp.parse(image.creation_date)
+        #backup_log = open(str(sys.argv[1]),"rw")
+        backup_log = open(args.file,"rw")
     except:
-      continue #skip it it doesn't exist.
-    image_seconds = image_date_parsed.strftime('%s')
-    if (int(today_seconds) - seconds_to_keep) > int(image_seconds):
-      print image.creation_date
-      block_list = image.block_device_mappings
-      response = image.deregister()
-      print "Image: " + image.image_id + " Deleted"
-      for items in block_list:
-        if items.has_key('Ebs'):
-          snapshot = ec2.Snapshot(items['Ebs']['SnapshotId'])
-          response = snapshot.delete()
-          #print "Snapshot Delete Response: " + str(response)
-          print "SnapshotID: " + items['Ebs']['SnapshotId'] + " Deleted"
+        print "Error: Unable to open file " + args.file
+        exit()
 
-backup_log.close()
+    for line in backup_log.readlines():
+      if "ImageId" in line:
+        tag, imageidraw = line.split(':')
+        imageid = imageidraw[2:-2]
+        image = ec2.Image(imageid)
+        # I don't cleanup my backup_log files (mainly so I have historical reference)
+        # Because of that I just skip the ImageId if it doesn't exist.
+        try:
+          image_date_parsed = dp.parse(image.creation_date)
+        except:
+          continue #skip it it doesn't exist.
+        image_seconds = image_date_parsed.strftime('%s')
+        if (int(today_seconds) - seconds_to_keep) > int(image_seconds):
+          print image.creation_date
+          block_list = image.block_device_mappings
+          response = image.deregister()
+          print "Image: " + image.image_id + " Deleted"
+          for items in block_list:
+            if items.has_key('Ebs'):
+              snapshot = ec2.Snapshot(items['Ebs']['SnapshotId'])
+              response = snapshot.delete()
+              #print "Snapshot Delete Response: " + str(response)
+              print "SnapshotID: " + items['Ebs']['SnapshotId'] + " Deleted"
 
+    backup_log.close()
+
+if __name__ == "__main__":
+    main()
