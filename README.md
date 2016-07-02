@@ -1,10 +1,5 @@
 # ami-manager
 
-###Disclaimer:
-This is very raw, and while it works is not very rubust "yet". 
-I've added some basice command line argument parsing, however I still have work to do, currently this still requires that you keep your imageids stored in a file in the "ImageId": "ami-2d8c6d4b" format.
-I'll beworking on adding more commanline arguments to allow adding the ImageId directly on the command line, for one off deletes.
-
 ###ami-manager: 
 aims to be a quick way to manage AWS AMIs and related snapshots. 
 Currently it is only functional to deregister AMIs and delete the related snapshots.
