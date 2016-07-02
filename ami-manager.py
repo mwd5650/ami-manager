@@ -54,7 +54,6 @@ def main():
     seconds_to_keep = args.time * 86400
     today_parsed = dp.parse(today)
     today_seconds = today_parsed.strftime('%s')
-    print seconds_to_keep
 
     try:
         backup_log = open(args.file,"rw")
@@ -75,14 +74,7 @@ def main():
           continue #skip if it doesn't exist.
         image_seconds = image_date_parsed.strftime('%s')
         if (int(today_seconds) - seconds_to_keep) > int(image_seconds):
-          block_list = image.block_device_mappings
-          response = image.deregister()
-          print "Image: " + image.image_id + " Deleted"
-          for items in block_list:
-            if items.has_key('Ebs'):
-              snapshot = ec2.Snapshot(items['Ebs']['SnapshotId'])
-              response = snapshot.delete()
-              print "SnapshotID: " + items['Ebs']['SnapshotId'] + " Deleted"
+          image_deregister(imageid)
 
     backup_log.close()
 

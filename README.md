@@ -23,7 +23,7 @@ days_to_keep parameter is the for telling ami_manager to delete AMIs in file_wit
       -t TIME, --time TIME  Number of Days to keep, Images in Filename older than
                           this will be deleted
       -i IMAGEID [IMAGEID ...], --imageid IMAGEID [IMAGEID ...]
-                          Imageid, or list of ImageIds to delete *****NOT IMPLIMENTED YET
+                          Imageid to delete
 
 
 The file_with_imageids can be formatted many ways, all that is really
